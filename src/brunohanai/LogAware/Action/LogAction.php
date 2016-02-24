@@ -8,7 +8,8 @@ use Monolog\Logger;
 class LogAction implements IAction
 {
     const NAME = 'log-aware';
-    const FILEPATH_KEY = '/media/sf_projects/log-aware/log.log';
+    const FILEPATH_KEY = 'filepath';
+
     const LEVEL_KEY = 'level';
 
     private $logger;
@@ -17,8 +18,8 @@ class LogAction implements IAction
     public function __construct(array $options = array())
     {
         $handler = new StreamHandler($options[self::FILEPATH_KEY]);
-
         $this->logger = new Logger(self::NAME, $handler);
+
         $this->level = $options[self::LEVEL_KEY];
     }
 

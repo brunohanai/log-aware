@@ -10,7 +10,11 @@ class Config
     const PARAMETERS_KEY = 'parameters';
     const PARAMETERS_LINES_KEY = 'lines';
 
+    const ACTIONS_KEY = 'actions';
+    const ACTIONS_LOG_KEY = 'log';
+
     const FILES_KEY = 'files';
+    const FILES_FILTERS_REGEX_KEY = 'regex';
 
     private $lines = 10;
     private $config;
@@ -20,6 +24,7 @@ class Config
         $yaml = new Yaml();
 
         $this->config = $yaml->parse(file_get_contents($config_filepath));
+        $this->config = $this->config[self::KEY];
     }
 
     public function getConfig()
@@ -29,6 +34,6 @@ class Config
 
     public function getFiles()
     {
-        return $this->config[self::KEY][self::FILES_KEY];
+        return $this->config[self::FILES_KEY];
     }
 }
