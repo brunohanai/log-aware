@@ -27,8 +27,8 @@ class Reader
             $output = substr($output, strpos($output, $mark) + strlen($mark));
         }
 
-        // create a new Mark and put in the file
-        $this->marker->mark($filepath);
+        // create a new Mark and save it... use the last line as 'mark'
+        $this->marker->saveMark($filepath, $this->tail($filepath, 1));
 
         return $output;
     }

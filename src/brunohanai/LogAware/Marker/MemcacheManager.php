@@ -4,7 +4,7 @@ namespace brunohanai\LogAware\Marker;
 
 class MemcacheManager implements IMarkerManager
 {
-    const TTL = 600;
+    const TTL = 6000;
 
     /** @var $memcache \Memcache */
     private $memcache;

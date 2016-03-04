@@ -11,13 +11,9 @@ class Marker
         $this->manager = $manager;
     }
 
-    public function mark($filepath)
+    public function saveMark($filepath, $content)
     {
-        // generate mark
-        $mark = sprintf('[log-aware#%s]', rand(0, 999));
-
-        // put mark in file
-        file_put_contents($filepath, sprintf("\n%s\n", $mark), FILE_APPEND);
+        $mark = $content;
 
         // save mark in MarkerManager
         $this->manager->saveMark($filepath, $mark);
