@@ -19,16 +19,17 @@ class Reader
         // tail the file
         $output = $this->tail($filepath, $lines);
 
-        // get current Mark
-        $mark = $this->marker->retrieveMark($filepath);
+        // get current and new Mark
+        $curentMark = $this->marker->retrieveMark($filepath);
+        $nextMark = $this->tail($filepath, 1); // new Mark = last line
 
         // if Mark exists, get text after it
-        if ($mark) {
-            $output = substr($output, strpos($output, $mark) + strlen($mark));
+        if ($curentMark) {
+            $output = substr($output, strpos($output, $curentMark) + strlen($curentMark));
         }
 
-        // create a new Mark and save it... use the last line as 'mark'
-        $this->marker->saveMark($filepath, $this->tail($filepath, 1));
+        // save the new Mark
+        $this->marker->saveMark($filepath, $nextMark);
 
         return $output;
     }

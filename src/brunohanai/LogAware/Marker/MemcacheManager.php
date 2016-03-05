@@ -9,34 +9,24 @@ class MemcacheManager implements IMarkerManager
     /** @var $memcache \Memcache */
     private $memcache;
 
-    private function connect()
+    public function __construct(\Memcache $memcache, $host = 'localhost')
     {
-        $this->memcache = new \Memcache();
-        $this->memcache->addserver('localhost');
+        $this->memcache = $memcache;
+        $this->memcache->addserver($host);
     }
 
-    private function disconnect()
+    public function __destruct()
     {
         $this->memcache->close();
     }
 
     public function retrieveMark($filepath)
     {
-        $this->connect();
-
-        $mark = $this->memcache->get($filepath);
-
-        $this->disconnect();
-
-        return $mark;
+        return $this->memcache->get($filepath);
     }
 
     public function saveMark($filepath, $mark)
     {
-        $this->connect();
-
         $this->memcache->set($filepath, $mark, 0, self::TTL);
-
-        $this->disconnect();
     }
 }

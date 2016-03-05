@@ -4,7 +4,6 @@ namespace brunohanai\LogAware\Action;
 
 class MailAction implements IAction
 {
-    const NAME = 'log-aware';
     const OPTION_SUBJECT_KEY = 'subject';
     const OPTION_TO_KEY = 'to';
     const OPTION_FROM_KEY = 'from';
@@ -18,14 +17,13 @@ class MailAction implements IAction
 
     public function __construct(array $options = array())
     {
-        $this->options = $options;
-
         $transport = \Swift_SmtpTransport::newInstance($options[self::OPTION_HOST_KEY], $options[self::OPTION_PORT_KEY])
             ->setUsername($options[self::OPTION_USERNAME_KEY])
             ->setPassword($options[self::OPTION_PASSWORD_KEY])
         ;
 
         $this->mailer = \Swift_Mailer::newInstance($transport);
+        $this->options = $options;
     }
 
     public function doAction($content)
@@ -37,6 +35,6 @@ class MailAction implements IAction
             ->setFrom($this->options[self::OPTION_FROM_KEY])
         ;
 
-        var_dump($this->mailer->send($message));
+        return $this->mailer->send($message);
     }
 }

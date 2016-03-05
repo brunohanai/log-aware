@@ -31,32 +31,29 @@ class ActionContainer
 
     private function addAction($name)
     {
-        $actions = $this->config->getActions();
+        $actionsConfig = $this->config->getActions();
 
-        if (!isset($actions[$name])) {
-            throw new \Exception(sprintf('This action does not exists. [action_name=%s]', $name));
+        if (!isset($actionsConfig[$name])) {
+            throw new \Exception(sprintf('Error on creating Action. This Action does not exists. [action_name=%s]', $name));
         }
 
-        $options = $actions[$name][Config::ACTIONS_OPTIONS_KEY];
+        $actionConfig = $actionsConfig[$name];
+        $actionOptions = $actionConfig[Config::ACTIONS_OPTIONS_KEY];
 
-        switch($actions[$name][Config::ACTIONS_TYPE_KEY]) {
+        switch($actionConfig[Config::ACTIONS_TYPE_KEY]) {
             case Config::ACTION_TYPE_LOG:
-                $action = new LogAction($options);
+                $action = new LogAction($actionOptions);
                 break;
             case Config::ACTION_TYPE_SLACK:
-                $action = new SlackAction($options);
+                $action = new SlackAction($actionOptions);
                 break;
             case Config::ACTION_TYPE_MAIL:
-                $action = new MailAction($options);
+                $action = new MailAction($actionOptions);
                 break;
             default:
-                $action = null;
+                return null;
         }
 
-        if ($action != null) {
-            $this->actions->offsetSet($name, $action);
-        }
-
-        return $action;
+        $this->actions->offsetSet($name, $action);
     }
 }

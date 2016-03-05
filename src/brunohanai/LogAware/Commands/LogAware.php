@@ -10,11 +10,12 @@ use brunohanai\LogAware\Marker\MemcacheManager;
 use brunohanai\LogAware\Parser\Parser;
 use brunohanai\LogAware\Action\ActionContainer;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Component\Yaml\Yaml;
 
 $a1 = __DIR__.'/../../../../log-aware.yml'; // será recebido pela linha de comando
 
-$config = new Config($a1);
-$worker = new Worker($config, new Reader(new Marker(new MemcacheManager())), new Parser(), new ActionContainer($config));
+$config = new Config(new Yaml(), $a1);
+$worker = new Worker($config, new Reader(new Marker(new MemcacheManager(new Memcache()))), new Parser(), new ActionContainer($config));
 
 $stopwatch = new Stopwatch();
 

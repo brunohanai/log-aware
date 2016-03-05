@@ -2,12 +2,12 @@
 
 namespace brunohanai\LogAware\Action;
 
-use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class LogAction implements IAction
 {
-    const NAME = 'log-aware';
+    const DEFAULT_NAME = 'log-aware';
     const OPTION_FILEPATH_KEY = 'filepath';
     const OPTION_LEVEL_KEY = 'level';
 
@@ -18,13 +18,13 @@ class LogAction implements IAction
     {
         $handler = new StreamHandler($options[self::OPTION_FILEPATH_KEY]);
 
-        $this->logger = new Logger(self::NAME, array($handler));
+        $this->logger = new Logger(self::DEFAULT_NAME, array($handler));
 
         $this->level = $options[self::OPTION_LEVEL_KEY];
     }
 
     public function doAction($content)
     {
-        $this->logger->log($this->level, $content);
+        return $this->logger->log($this->level, $content);
     }
 }

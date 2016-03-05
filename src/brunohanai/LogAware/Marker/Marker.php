@@ -15,7 +15,6 @@ class Marker
     {
         $mark = $content;
 
-        // save mark in MarkerManager
         $this->manager->saveMark($filepath, $mark);
     }
 
