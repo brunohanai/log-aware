@@ -2,6 +2,8 @@
 
 namespace brunohanai\LogAware\Action;
 
+use brunohanai\LogAware\Config\Config;
+
 class SlackAction implements IAction
 {
     const OPTION_WEBHOOK_KEY = 'webhook_url';
@@ -9,11 +11,13 @@ class SlackAction implements IAction
     const OPTION_ICON_KEY = 'icon_emoji';
     const OPTION_USERNAME_KEY = 'username';
 
+    private $name;
     private $curl;
     private $options;
 
-    public function __construct(array $options = array())
+    public function __construct($name, array $options = array())
     {
+        $this->name = $name;
         $this->options = $options;
         $this->curl = curl_init();
 
@@ -51,5 +55,15 @@ class SlackAction implements IAction
     public function __destruct()
     {
         curl_close($this->curl);
+    }
+
+    public function getType()
+    {
+        return Config::ACTION_TYPE_SLACK;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 }

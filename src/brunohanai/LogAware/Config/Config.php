@@ -56,7 +56,7 @@ class Config
         try {
             $this->processor->processConfiguration($this->configDefinition, $this->config);
         } catch (\Exception $e) {
-            throw new \Exception(sprintf('LogAware: Wrong config. Exiting... [error_msg=%s]', $e->getMessage()));
+            throw new \Exception(sprintf('LogAware: Wrong config. [error_msg=%s]', $e->getMessage()));
         }
     }
 

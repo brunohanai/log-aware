@@ -42,13 +42,13 @@ class ActionContainer
 
         switch($actionConfig[Config::ACTIONS_TYPE_KEY]) {
             case Config::ACTION_TYPE_LOG:
-                $action = new LogAction($actionOptions);
+                $action = new LogAction($name, $actionOptions);
                 break;
             case Config::ACTION_TYPE_SLACK:
-                $action = new SlackAction($actionOptions);
+                $action = new SlackAction($name, $actionOptions);
                 break;
             case Config::ACTION_TYPE_MAIL:
-                $action = new MailAction($actionOptions);
+                $action = new MailAction($name, $actionOptions);
                 break;
             default:
                 return null;
