@@ -8,7 +8,7 @@ use brunohanai\LogAware\Action\SlackAction;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Configuration implements ConfigurationInterface
+class ConfigDefinition implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {

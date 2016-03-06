@@ -3,6 +3,7 @@
 require __DIR__.'/../../../../vendor/autoload.php';
 
 use brunohanai\LogAware\Config\Config;
+use brunohanai\LogAware\Config\ConfigDefinition;
 use brunohanai\LogAware\Worker;
 use brunohanai\LogAware\Reader\Reader;
 use brunohanai\LogAware\Marker\Marker;
@@ -11,31 +12,19 @@ use brunohanai\LogAware\Parser\Parser;
 use brunohanai\LogAware\Action\ActionContainer;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Config\Definition\Processor;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use Symfony\Component\Config\Definition\Processor;
-use brunohanai\LogAware\Config\Configuration;
 
 if (count($argv) === 1) {
     error_log('LogAware: Missing config filepath. Exiting...');
     exit();
 }
 
-$configFilepath = $argv[1];
-
-$config = new Config(new Yaml(), $configFilepath);
-
-$processor = new Processor();
-$configuration = new Configuration();
-
-try {
-    $processed = $processor->processConfiguration($configuration, $config->getConfig());
-} catch (\Exception $e) {
-    error_log(sprintf('LogAware: Wrong config. Exiting... [error_msg=%s]', $e->getMessage()));
-    exit();
-}
-
 $stopwatch = new Stopwatch();
+
+$config = new Config(new ConfigDefinition(), new Processor(), new Yaml());
+$config->loadConfigFile($argv[1]);
 
 $systemConfig = $config->getSystem();
 

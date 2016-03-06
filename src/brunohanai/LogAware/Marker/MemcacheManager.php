@@ -9,10 +9,14 @@ class MemcacheManager implements IMarkerManager
     /** @var $memcache \Memcache */
     private $memcache;
 
-    public function __construct(\Memcache $memcache, $host = 'localhost')
+    public function __construct(\Memcache $memcache, $host = 'localhost', $port = 11211)
     {
         $this->memcache = $memcache;
         $this->memcache->addserver($host);
+
+        if ($this->memcache->connect($host) === false) {
+            throw new \Exception(sprintf('LogAware: Memcache, connection refused. [host=%s] [port=%s]', $host, $port));
+        }
     }
 
     public function __destruct()
@@ -27,6 +31,6 @@ class MemcacheManager implements IMarkerManager
 
     public function saveMark($filepath, $mark)
     {
-        $this->memcache->set($filepath, $mark, 0, self::TTL);
+        return $this->memcache->set($filepath, $mark, 0, self::TTL);
     }
 }
