@@ -20,7 +20,9 @@
     "symfony/config": "2.6.12",
     "symfony/yaml": "2.6.12",
     "symfony/stopwatch": "2.6.13",
-    "swiftmailer/swiftmailer": "5.4.1"
+    "swiftmailer/swiftmailer": "5.4.1",
+    "symfony/dependency-injection": "2.6.13",
+    "symfony/event-dispatcher": "2.6.13"
   },
   "require-dev": {
     "phpunit/phpunit": "4.8.21",

@@ -16,39 +16,42 @@ use Symfony\Component\Config\Definition\Processor;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use brunohanai\LogAware\EventDispatcher\Events;
+use brunohanai\LogAware\EventDispatcher\Listener\LoggerSubscriber;
+use brunohanai\LogAware\EventDispatcher\Listener\StopwatchSubscriber;
+use brunohanai\LogAware\EventDispatcher\Event\SystemEvent;
+
 if (count($argv) === 1) {
     error_log('LogAware: Missing config filepath. Exiting...');
     exit();
 }
-
-$stopwatch = new Stopwatch();
 
 $config = new Config(new ConfigDefinition(), new Processor(), new Yaml());
 $config->loadConfigFile($argv[1]);
 
 $systemConfig = $config->getSystem();
 
+$stopwatch = new Stopwatch();
 $logger = new Logger('log-aware', array(
     new StreamHandler($systemConfig[Config::SYSTEM_LOG_FILEPATH_KEY], $systemConfig[Config::SYSTEM_LOG_LEVEL_KEY])
 ));
 
-$worker = new Worker($config, new Reader(new Marker(new MemcacheManager(new Memcache()))), new Parser(), new ActionContainer($config), $logger);
+/** Dispatcher */
+$dispatcher = new EventDispatcher();
+$dispatcher->addSubscriber(new StopwatchSubscriber());
+$dispatcher->addSubscriber(new LoggerSubscriber($logger));
 
-$logger->info('Starting LogAware...');
-$stopwatch->start('LogAware');
+$dispatcher->dispatch(Events::SYSTEM_START, new SystemEvent($stopwatch));
 
-foreach($config->getFiles() as $file) {
-    $stopwatchName = sprintf('LogAware/File[%s]', $file[Config::FILES_FILEPATH_KEY]);
-    $stopwatch->start($stopwatchName);
+$worker = new Worker(
+    $config,
+    new Reader(new Marker(new MemcacheManager(new Memcache()))),
+    new Parser(),
+    new ActionContainer($config),
+    $dispatcher,
+    $stopwatch
+);
+$worker->execute($config->getFiles());
 
-    $filepath = $file[Config::FILES_FILEPATH_KEY];
-
-    $logger->debug(sprintf('Reading %s...', $filepath));
-    $worker->execute($file[Config::FILES_FILEPATH_KEY], $file[Config::FILES_FILTERS_KEY]);
-
-    $stopwatchFileResult = $stopwatch->stop($stopwatchName);
-    $logger->info(sprintf('Done. [file=%s] [duration=%sms]', $filepath, $stopwatchFileResult->getDuration()));
-}
-
-$stopwatchResult = $stopwatch->stop('LogAware');
-$logger->info(sprintf('LogAware completed. [duration=%sms]', $stopwatchResult->getDuration()));
+$dispatcher->dispatch(Events::SYSTEM_END, new SystemEvent($stopwatch));

@@ -2,6 +2,8 @@
 
 namespace brunohanai\LogAware\Action;
 
+use brunohanai\LogAware\Config\Config;
+
 class MailAction implements IAction
 {
     const OPTION_SUBJECT_KEY = 'subject';
@@ -12,16 +14,18 @@ class MailAction implements IAction
     const OPTION_USERNAME_KEY = 'username';
     const OPTION_PASSWORD_KEY = 'password';
 
+    private $name;
     private $mailer;
     private $options;
 
-    public function __construct(array $options = array())
+    public function __construct($name, array $options = array())
     {
         $transport = \Swift_SmtpTransport::newInstance($options[self::OPTION_HOST_KEY], $options[self::OPTION_PORT_KEY])
             ->setUsername($options[self::OPTION_USERNAME_KEY])
             ->setPassword($options[self::OPTION_PASSWORD_KEY])
         ;
 
+        $this->name = $name;
         $this->mailer = \Swift_Mailer::newInstance($transport);
         $this->options = $options;
     }
@@ -36,5 +40,15 @@ class MailAction implements IAction
         ;
 
         return $this->mailer->send($message);
+    }
+
+    public function getType()
+    {
+        return Config::ACTION_TYPE_MAIL;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 }
