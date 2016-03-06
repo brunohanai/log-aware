@@ -1,0 +1,38 @@
+log_aware:                  # required
+  system:                   # required
+    log_filepath: ~         # required, change it (example: /var/log/log-aware.log)
+    log_level: ~            # required, change it (options: emergency, alert, critical, error, warning, notice, info, debug)
+  actions:                  # required
+    slack_test:
+      type: slack           # required, change it (options: mail, slack, log)
+      options:              # required
+        webhook_url: ~      # required when 'type=slack', change it (example: https://hooks.slack.com/services/RDS/RSASA231/SFfsmaSAD)
+        channel: ~          # required when 'type=slack', change it (example: '#general')
+        icon_emoji: ~       # required when 'type=slack', change it (example: ':ghost:')
+        username: ~         # required when 'type=slack', change it (example: log-aware-bot)
+    log_test:
+      type: log             # required, change it (options: mail, slack, log)
+      options:              # required
+        filepath: ~         # required when 'type=log', change it (example: /var/log/log-aware/errors.log)
+        level: ~            # required when 'type=log', change it (options: emergency, alert, critical, error, warning, notice, info, debug)
+    mail_test:
+      type: mail            # required, change it (options: mail, slack, log)
+      options:              # required
+        subject: ~          # required when 'type=mail', change it (example: Log Aware)
+        to: ~               # required when 'type=mail', change it (example: to@mail.com)
+        from: ~             # required when 'type=mail', change it (example: from@mail.com)
+        host: ~             # required when 'type=mail', change it (example: smtp.mandrillapp.com)
+        port: ~             # required when 'type=mail', change it (example: 587)
+        username: ~         # required when 'type=mail', change it (example: username@mail.com)
+        password: ~         # required when 'type=mail', change it (example: 12345)
+  files:                    # required
+    - filepath: ~           # required, change it (example: /var/log/httpd/error.log)
+      filters:              # required
+        - description: ~    # required, change it (example: Looking for ERRORS)
+          regex: ~          # required, change it (example: /.*ERROR:.*/)
+          actions: ~        # required, change it. (example: [slack_test, log_test])
+    - filepath: ~
+      filters:
+        - description: ~
+          regex: ~
+          actions: ~

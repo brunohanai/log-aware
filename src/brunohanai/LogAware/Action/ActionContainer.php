@@ -2,7 +2,7 @@
 
 namespace brunohanai\LogAware\Action;
 
-use brunohanai\LogAware\Config;
+use brunohanai\LogAware\Config\Config;
 
 class ActionContainer
 {
@@ -55,5 +55,7 @@ class ActionContainer
         }
 
         $this->actions->offsetSet($name, $action);
+
+        return $action;
     }
 }
