@@ -3,19 +3,17 @@
 namespace brunohanai\LogAware;
 
 use brunohanai\LogAware\Action\SlackAction;
+use brunohanai\LogAware\Config\Config;
 
 class SlackActionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDoAction()
+    public function testGetTypeAndGetName()
     {
-        $content = 'phpunit...';
+        $actionName = 'slack';
 
-        $options = array(
-            'webhook_url' => 'https://hooks.slack.com/services/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',
-            'channel' => '#random'
-        );
+        $slackAction = new SlackAction($actionName, array(SlackAction::OPTION_WEBHOOK_KEY => 'webhook_url'));
 
-        $action = new SlackAction($options);
-        $action->doAction($content);
+        $this->assertEquals(Config::ACTION_TYPE_SLACK, $slackAction->getType());
+        $this->assertEquals($actionName, $slackAction->getName());
     }
 }
