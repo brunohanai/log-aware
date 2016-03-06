@@ -42,7 +42,7 @@ service httpd restart
 cd /var/www 
 git clone https://github.com/brunohanai/log-aware.git
 cd log-aware
-composer install
+composer install --no-dev
 ```
 
 ### 1.4 Criar o arquivo de configuração
@@ -80,7 +80,7 @@ log_aware:
         username: user
         password: pass
   files:
-    - filepath: /var/www/httpd/error.log
+    - filepath: /var/log/httpd/error.log
       filters:
         - description: Looking for Exception
           regex: /.*Exception.*/
