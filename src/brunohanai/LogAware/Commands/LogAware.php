@@ -52,6 +52,6 @@ $worker = new Worker(
     $dispatcher,
     $stopwatch
 );
-$worker->execute($config->getFiles());
+$worker->execute();
 
 $dispatcher->dispatch(Events::SYSTEM_END, new SystemEvent($stopwatch));

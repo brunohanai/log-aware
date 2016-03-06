@@ -32,13 +32,13 @@ class Worker
         $this->stopwatch = $stopwatch;
     }
 
-    public function execute($files)
+    public function execute()
     {
-        if (!is_array($files)) {
-            return;
+        if (!is_array($this->config->getFiles())) {
+            return false;
         }
 
-        foreach($files as $file) {
+        foreach($this->config->getFiles() as $file) {
             $this->executeFile($file[Config::FILES_FILEPATH_KEY], $file[Config::FILES_FILTERS_KEY]);
         }
     }
