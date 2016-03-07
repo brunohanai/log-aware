@@ -8,13 +8,13 @@ Exemplo de configuração:
 
 ```
 actions:
-    slack_test:                                             # Alterar
+    slack_test:                                                 # Alterar
         type: slack
         options:
-        webhook_url: https://hooks.slack.com/services/...   # Alterar
-        channel: '#random'                                  # Alterar
-        icon_emoji: :ghost:                                 # Alterar
-        username: bot_name                                  # Alterar
+            webhook_url: https://hooks.slack.com/services/...   # Alterar
+            channel: '#random'                                  # Alterar
+            icon_emoji: :ghost:                                 # Alterar
+            username: bot_name                                  # Alterar
 ```
 
 ## MailAction
